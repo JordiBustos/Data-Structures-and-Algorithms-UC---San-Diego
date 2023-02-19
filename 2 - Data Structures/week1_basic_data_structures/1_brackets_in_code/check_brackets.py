@@ -19,6 +19,8 @@ def find_mismatch(text):
         else:
             if next in ")]}":
                 # Process closing bracket, write your code here
+                if len(opening_brackets_stack) == 0:
+                    return i+1
                 top = opening_brackets_stack.pop()
                 if not are_matching(top, next):
                     return i+1

@@ -1,10 +1,51 @@
 # python3
 
+class StackWithMax():
+    def __init__(self):
+        self.__stack = []
+        self.__stack_ordered = []
+        self.length = 0
+    
+    def Push(self, a):
+        self.__stack.append(a)
+        self.length += 1
+        if len(self.__stack_ordered) == 0:
+            self.__stack_ordered.append(a)
+        else:
+            if a >= self.__stack_ordered[-1]:
+                self.__stack_ordered.append(a)
+            else:
+                self.__stack_ordered.append(self.__stack_ordered[-1])
+    
+    def Pop(self):
+        assert(len(self.__stack))
+        self.length -= 1
+        self.__stack_ordered.pop()
+        return self.__stack.pop()
+
+    def Max(self):
+        assert(len(self.__stack))
+        return self.__stack_ordered[-1]
 
 def max_sliding_window_naive(sequence, m):
     maximums = []
-    for i in range(len(sequence) - m + 1):
-        maximums.append(max(sequence[i:i + m]))
+    stack1 = StackWithMax()
+    stack2 = []
+
+    for i in range(m):
+        stack1.Push(sequence[i])
+   
+    maximums.append(stack1.Max())
+
+    for i in range(m, len(sequence)):
+        while stack1.length > 0:
+            stack2.append(stack1.Pop())
+        stack2.pop()
+        while len(stack2) > 0:
+            stack1.Push(stack2.pop())
+        stack1.Push(sequence[i])
+        
+        maximums.append(stack1.Max())
 
     return maximums
 
